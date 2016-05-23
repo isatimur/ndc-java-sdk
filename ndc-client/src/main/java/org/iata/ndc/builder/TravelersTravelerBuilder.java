@@ -47,7 +47,7 @@ final class TravelersTravelerBuilder implements Buildable<List<TravelersTraveler
     }
 
     void setDefaults() {
-        if (anonymousTravelers.size() == 0) {
+        if (anonymousTravelers.isEmpty()) {
             addAnonymousTravelers(Traveler.ADT, 1);
         }
     }

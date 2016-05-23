@@ -22,9 +22,17 @@ public class FlighPriceRQBuilderTest {
      * Test of build method, of class FlighPriceRQBuilder.
      */
     @Test
-    public void testBuild() {
+    public void testBuild_Travelers() {
         FlightPriceRQ result = testedClass.build();
-        assertNotNull(result);
+        assertEquals(1, result.getTravelers().size());
     }
     
+     /**
+     * Test of build method, of class FlighPriceRQBuilder.
+     */
+    @Test
+    public void testBuild_Sender() {
+        FlightPriceRQ result = testedClass.build();
+        assertNotNull(result.getParty().getSender());
+    }
 }
