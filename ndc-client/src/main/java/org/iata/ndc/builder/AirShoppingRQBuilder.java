@@ -20,23 +20,6 @@ import org.iata.ndc.schema.TravelerCoreType.PTC;
  */
 public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 
-	/**
-	 * Traveler enum represents possible traveler types.
-	 */
-	public enum Traveler {
-		/** Adult */
-		ADT,
-		/** Child */
-		CNN,
-		/** Child */
-		CHD,
-		/** Infant */
-		INF,
-		/** Government */
-		GVT,
-		/** State government */
-		GST
-	};
 
 	private static final ObjectFactory factory = new ObjectFactory();
 
@@ -66,7 +49,7 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 	 * Re-initializes builder to empty state.
 	 */
 	public void clear() {
-		anonymousTravelers = new HashMap<AirShoppingRQBuilder.Traveler, Integer>();
+		anonymousTravelers = new HashMap<Traveler, Integer>();
 		airlines = new LinkedHashSet<String>();
 		fares = new LinkedHashSet<String>();
 		cabins = new LinkedHashSet<String>();
