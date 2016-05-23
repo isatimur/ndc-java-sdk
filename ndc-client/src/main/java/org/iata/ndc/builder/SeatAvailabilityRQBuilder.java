@@ -6,7 +6,7 @@ import org.iata.ndc.schema.*;
  * This class provides a simple way to create SeatAvailabilityRQ objects. It implements fluent interface, thus allowing to chain methods.<br>
  * Since the object returned by {@link #build build()} can be modified any further customization can be performed manually.
  */
-public class SeatAvailabilityRQBuilder {
+public class SeatAvailabilityRQBuilder implements Buildable<SeatAvailabilityRQ>{
 	private static final ObjectFactory factory = new ObjectFactory();
 
 	private SeatAvailabilityRQ request;
@@ -67,8 +67,9 @@ public class SeatAvailabilityRQBuilder {
 	 * Builds SeatAvailabilityRQ instance and returns it.
 	 * @return constructed SeatAvailabilityRQ instance
 	 */
+        @Override
 	public SeatAvailabilityRQ build() {
-		request.setVersion("1.1.5");
+		request.setVersion(VERSION);
 		addDocumentNode();
 		addPreferencesNode();
 

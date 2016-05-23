@@ -3,7 +3,7 @@ package org.iata.ndc.builder;
 import org.iata.ndc.schema.*;
 import org.iata.ndc.schema.ShoppingResponseIDType.ResponseID;
 
-public class ServiceListRQBuilder {
+public class ServiceListRQBuilder implements Buildable<ServiceListRQ>{
 	private static final ObjectFactory factory = new ObjectFactory();
 
 	private ServiceListRQ request;
@@ -42,8 +42,9 @@ public class ServiceListRQBuilder {
 		return this;
 	}
 
+        @Override
 	public ServiceListRQ build() {
-		request.setVersion("1.1.5");
+		request.setVersion(VERSION);
 		addDocumentNode();
 		return request;
 	}

@@ -2,12 +2,13 @@ package org.iata.ndc.builder.element;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.iata.ndc.builder.Buildable;
 
 import org.iata.ndc.schema.*;
 import org.iata.ndc.schema.DataListType.Flight;
 import org.iata.ndc.schema.FlightCOSCoreType.Code;
 
-public class DataListBuilder {
+public class DataListBuilder implements Buildable<DataListType>{
 	private static final ObjectFactory factory = new ObjectFactory();
 	private DataListType dataList;
 
@@ -102,6 +103,7 @@ public class DataListBuilder {
 	 * Builds MsgPartiesType instance and returns it.
 	 * @return constructed MsgPartiesType instance
 	 */
+        @Override
 	public DataListType build() {
 		return dataList;
 	}

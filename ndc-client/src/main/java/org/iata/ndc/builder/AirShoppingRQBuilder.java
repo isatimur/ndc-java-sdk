@@ -18,7 +18,7 @@ import org.iata.ndc.schema.TravelerCoreType.PTC;
  * This class provides a simple way to create AirShoppingRQ objects. It implements fluent interface, thus allowing to chain methods.<br>
  * Since the object returned by {@link #build build()} can be modified any further customization can be performed manually.
  */
-public class AirShoppingRQBuilder {
+public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 
 	/**
 	 * Traveler enum represents possible traveler types.
@@ -223,6 +223,7 @@ public class AirShoppingRQBuilder {
 	 * Builds AirShoppingRQ instance and returns it.
 	 * @return constructed AirShoppingRQ instance
 	 */
+        @Override
 	public AirShoppingRQ build() {
 		setDefaults();
 
@@ -320,7 +321,7 @@ public class AirShoppingRQBuilder {
 	}
 
 	private void addRequestAttributes() {
-		request.setVersion("1.1.5");
+		request.setVersion(VERSION);
 	}
 
 	private static XMLGregorianCalendar getDate(Date date) {
