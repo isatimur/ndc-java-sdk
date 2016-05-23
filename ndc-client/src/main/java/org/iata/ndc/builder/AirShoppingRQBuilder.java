@@ -1,6 +1,5 @@
 package org.iata.ndc.builder;
 
-import java.math.BigInteger;
 import java.util.*;
 
 import javax.xml.datatype.*;
@@ -12,7 +11,6 @@ import org.iata.ndc.schema.AirShopReqAttributeQueryTypeOriginDestination.Calenda
 import org.iata.ndc.schema.FarePreferencesType.Type;
 import org.iata.ndc.schema.FlightDepartureType.AirportCode;
 import org.iata.ndc.schema.MsgPartiesType.Sender;
-import org.iata.ndc.schema.TravelerCoreType.PTC;
 
 /**
  * This class provides a simple way to create AirShoppingRQ objects. It implements fluent interface, thus allowing to chain methods.<br>
@@ -20,18 +18,18 @@ import org.iata.ndc.schema.TravelerCoreType.PTC;
  */
 public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 
-
 	private static final ObjectFactory factory = new ObjectFactory();
 
 	private AirShoppingRQ request;
 
-	private Map<Traveler, Integer> anonymousTravelers;
 	private Sender sender;
 	private MsgPartiesType party;
 
 	private Set<String> airlines;
 	private Set<String> fares;
 	private Set<String> cabins;
+        
+        private TravelersTravelerBuilder travelerBuilder;
 
 	/**
 	 * Creates a new instance of AirShoppingRQBuilder.
@@ -48,8 +46,7 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 	/**
 	 * Re-initializes builder to empty state.
 	 */
-	public void clear() {
-		anonymousTravelers = new HashMap<Traveler, Integer>();
+	public final void clear() {
 		airlines = new LinkedHashSet<String>();
 		fares = new LinkedHashSet<String>();
 		cabins = new LinkedHashSet<String>();
@@ -57,6 +54,7 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 		request = Initializer.getObject(AirShoppingRQ.class);
 		sender = null;
 		party = null;
+                travelerBuilder = new TravelersTravelerBuilder();
 	}
 
 	/**
@@ -108,12 +106,7 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 	 * @return current builder instance
 	 */
 	public AirShoppingRQBuilder addAnonymousTravelers(Traveler traveler, int count) {
-		if (!anonymousTravelers.containsKey(traveler)) {
-			anonymousTravelers.put(traveler, count);
-			return this;
-		}
-		Integer total = anonymousTravelers.get(traveler) + count;
-		anonymousTravelers.put(traveler, total);
+		travelerBuilder.addAnonymousTravelers(traveler, count);
 		return this;
 	}
 
@@ -270,9 +263,7 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 	}
 
 	private void setDefaults() {
-		if (anonymousTravelers.size() == 0) {
-			addAnonymousTraveler(Traveler.ADT);
-		}
+            travelerBuilder.setDefaults();
 	}
 
 	private void addPartyNode() {
@@ -285,15 +276,8 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 	}
 
 	private void addTravelers() {
-		for (Traveler t: anonymousTravelers.keySet()) {
-			org.iata.ndc.schema.TravelersTraveler traveler = factory.createTravelersTraveler();
-			traveler.setAnonymousTraveler(factory.createAnonymousTravelerType());
-			PTC ptc = factory.createTravelerCoreTypePTC();
-			ptc.setValue(t.name());
-			ptc.setQuantity(BigInteger.valueOf(anonymousTravelers.get(t)));
-			traveler.getAnonymousTraveler().setPTC(ptc);
-			request.getTravelers().add(traveler);
-		}
+		List<TravelersTraveler> travelers = travelerBuilder.build();
+                request.getTravelers().addAll(travelers);
 	}
 
 	private void addDocumentNode() {
