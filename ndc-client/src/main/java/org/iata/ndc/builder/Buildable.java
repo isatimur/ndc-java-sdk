@@ -6,7 +6,7 @@ package org.iata.ndc.builder;
  */
 public interface Buildable<T> {
     
-    String VERSION = "1.1.5";
+    String VERSION = "15.2";
     
     T build();
 }
