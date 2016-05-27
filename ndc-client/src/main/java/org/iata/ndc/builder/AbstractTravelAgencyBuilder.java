@@ -20,13 +20,13 @@ abstract class AbstractTravelAgencyBuilder<T> implements Buildable<T> {
     public AbstractTravelAgencyBuilder() {
         this.factory = new ObjectFactory();
         travelerBuilder = new TravelersTravelerBuilder();
-        initialize();
+        clear();
     }
 
     /**
      * Re-initializes builder to empty state.
      */
-    public final void initialize() {
+    public final void clear() {
         sender = null;
         doInitialize();
     }

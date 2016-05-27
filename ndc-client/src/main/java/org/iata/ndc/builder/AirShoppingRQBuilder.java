@@ -28,7 +28,7 @@ public class AirShoppingRQBuilder extends AbstractTravelAgencyBuilder<AirShoppin
 
 	/**
 	 * Creates a new instance of AirShoppingRQBuilder.
-	 * A new instance can be created for each request or you can use the {@link #initialize() initialize()} method.<br>
+	 * A new instance can be created for each request or you can use the {@link #clean() clean()} method.<br>
 	 *
 	 * Defaults:<ol>
 	 * <li> One adult traveler.
