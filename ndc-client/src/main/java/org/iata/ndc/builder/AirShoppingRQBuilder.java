@@ -16,20 +16,17 @@ import org.iata.ndc.schema.MsgPartiesType.Sender;
  * This class provides a simple way to create AirShoppingRQ objects. It implements fluent interface, thus allowing to chain methods.<br>
  * Since the object returned by {@link #build build()} can be modified any further customization can be performed manually.
  */
-public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
-
-	private static final ObjectFactory factory = new ObjectFactory();
+public class AirShoppingRQBuilder extends AbstractTravelAgencyBuilder<AirShoppingRQ>{
 
 	private AirShoppingRQ request;
 
-	private Sender sender;
+	
 	private MsgPartiesType party;
 
 	private Set<String> airlines;
 	private Set<String> fares;
 	private Set<String> cabins;
         
-        private TravelersTravelerBuilder travelerBuilder;
 
 	/**
 	 * Creates a new instance of AirShoppingRQBuilder.
@@ -40,21 +37,19 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 	 * </ol>
 	 */
 	public AirShoppingRQBuilder() {
-		clear();
 	}
 
 	/**
 	 * Re-initializes builder to empty state.
 	 */
-	public final void clear() {
+        @Override
+	protected void doInitialize() {
 		airlines = new LinkedHashSet<String>();
 		fares = new LinkedHashSet<String>();
 		cabins = new LinkedHashSet<String>();
 
 		request = Initializer.getObject(AirShoppingRQ.class);
-		sender = null;
 		party = null;
-                travelerBuilder = new TravelersTravelerBuilder();
 	}
 
 	/**
@@ -67,49 +62,8 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 		return this;
 	}
 
-	/**
-	 * Creates TravelAgencySender representation and sets it as request sender.
-	 * Second invocation will override previous value.<br>
-	 * If both this method and {@link #setParty(MsgPartiesType)} are called, party data will be set.
-	 * Sender in the party will be overridden by one created in {@link #addTravelAgencySender(String, String, String)}
-	 *
-	 * <p> Consider using {@link #setParty(MsgPartiesType)} with {@link PartyBuilder}.
-	 *
-	 * @param name Travel agency name
-	 * @param iataNumber IATA number for the agency
-	 * @param agencyId agency ID
-	 * @return current builder instance
-	 */
-	public AirShoppingRQBuilder addTravelAgencySender(String name, String iataNumber, String agencyId) {
-		MsgPartiesType p = new PartyBuilder().setTravelAgencySender(name, iataNumber, agencyId).build();
-		sender = p.getSender();
-		return this;
-	}
 
-	/**
-	 * Adds anonymous traveler of type {@link Traveler} to traveler list.<br>
-	 * <strong>Note:</strong> if this type of traveler already exists, increments the count for this type of traveler.
-	 *
-	 * @param traveler type of traveler
-	 * @return current builder instance
-	 */
-	public AirShoppingRQBuilder addAnonymousTraveler(Traveler traveler) {
-		return addAnonymousTravelers(traveler, 1);
-	}
-
-	/**
-	 * Adds multiple anonymous travelers of type {@link Traveler} to traveler list.<br>
-	 * <strong>Note:</strong> if this type of traveler already exists, increments the count for this type of traveler.
-	 *
-	 * @param traveler type of traveler
-	 * @param count number of travelers
-	 * @return current builder instance
-	 */
-	public AirShoppingRQBuilder addAnonymousTravelers(Traveler traveler, int count) {
-		travelerBuilder.addAnonymousTravelers(traveler, count);
-		return this;
-	}
-
+	
 	/**
 	 * Adds prebuilt {@link AirShopReqAttributeQueryTypeOriginDestination} instance to the list of OriginDestinations.
 	 * @param originDestination originDestination to add
@@ -145,14 +99,14 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 	public AirShoppingRQBuilder addOriginDestination(String origin, String destination, Date date, int daysBefore, int daysAfter) {
 		AirShopReqAttributeQueryTypeOriginDestination originDestination = Initializer.getObject(AirShopReqAttributeQueryTypeOriginDestination.class);
 
-		AirportCode airportCode = factory.createFlightDepartureTypeAirportCode();
+		AirportCode airportCode = getFactoy().createFlightDepartureTypeAirportCode();
 		originDestination.getDeparture().setAirportCode(airportCode);
 		originDestination.getDeparture().getAirportCode().setValue(origin);
 		originDestination.getArrival().getAirportCode().setValue(destination);
 		originDestination.getDeparture().setDate(getDate(date));
 
 		if( daysBefore != 0 || daysAfter != 0) {
-			CalendarDates dates = factory.createAirShopReqAttributeQueryTypeOriginDestinationCalendarDates();
+			CalendarDates dates = getFactoy().createAirShopReqAttributeQueryTypeOriginDestinationCalendarDates();
 			dates.setDaysBefore(daysBefore);
 			dates.setDaysAfter(daysAfter);
 			originDestination.setCalendarDates(dates);
@@ -219,13 +173,13 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 		if (cabins.size() == 0) {
 			return;
 		}
-		CabinPreferencesType cabinPreferencesType = factory.createCabinPreferencesType();
+		CabinPreferencesType cabinPreferencesType = getFactoy().createCabinPreferencesType();
 		for (String code: cabins) {
-			CabinType cabin = factory.createCabinType();
+			CabinType cabin = getFactoy().createCabinType();
 			cabin.setCode(code);
 			cabinPreferencesType.getCabinType().add(cabin);
 		}
-		org.iata.ndc.schema.AirShoppingRQ.Preference preferenceElement = factory.createAirShoppingRQPreference();
+		org.iata.ndc.schema.AirShoppingRQ.Preference preferenceElement = getFactoy().createAirShoppingRQPreference();
 		preferenceElement.setCabinPreferences(cabinPreferencesType);
 		request.getPreferences().add(preferenceElement);
 	}
@@ -234,13 +188,13 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 		if (fares.size() == 0) {
 			return;
 		}
-		FarePreferencesType farePreferences = factory.createFarePreferencesType();
+		FarePreferencesType farePreferences = getFactoy().createFarePreferencesType();
 		for (String code : fares) {
-			Type type = factory.createFarePreferencesTypeType();
+			Type type = getFactoy().createFarePreferencesTypeType();
 			type.setCode(code);
 			farePreferences.getTypes().add(type);
 		}
-		org.iata.ndc.schema.AirShoppingRQ.Preference preferenceElement = factory.createAirShoppingRQPreference();
+		org.iata.ndc.schema.AirShoppingRQ.Preference preferenceElement = getFactoy().createAirShoppingRQPreference();
 		preferenceElement.setFarePreferences(farePreferences);
 		request.getPreferences().add(preferenceElement);
 	}
@@ -249,39 +203,35 @@ public class AirShoppingRQBuilder implements Buildable<AirShoppingRQ>{
 		if (airlines.size() == 0) {
 			return;
 		}
-		AirlinePreferencesType airlinePreferences = factory.createAirlinePreferencesType();
+		AirlinePreferencesType airlinePreferences = getFactoy().createAirlinePreferencesType();
 		for (String code : airlines) {
-			AirlinePreferencesType.Airline airline = factory.createAirlinePreferencesTypeAirline();
-			AirlineID airlineID = factory.createAirlineID();
+			AirlinePreferencesType.Airline airline = getFactoy().createAirlinePreferencesTypeAirline();
+			AirlineID airlineID = getFactoy().createAirlineID();
 			airlineID.setValue(code);
 			airline.setAirlineID(airlineID);
 			airlinePreferences.getAirline().add(airline);
 		}
-		org.iata.ndc.schema.AirShoppingRQ.Preference preferenceElement = factory.createAirShoppingRQPreference();
+		org.iata.ndc.schema.AirShoppingRQ.Preference preferenceElement = getFactoy().createAirShoppingRQPreference();
 		preferenceElement.setAirlinePreferences(airlinePreferences);
 		request.getPreferences().add(preferenceElement);
 	}
 
-	private void setDefaults() {
-            travelerBuilder.setDefaults();
-	}
 
 	private void addPartyNode() {
 		if (party == null) {
-			party = factory.createMsgPartiesType();
+			party = getFactoy().createMsgPartiesType();
 		}
-		party.setSender(sender);
+		party.setSender(getSender());
 
 		request.setParty(party);
 	}
 
 	private void addTravelers() {
-		List<TravelersTraveler> travelers = travelerBuilder.build();
-                request.getTravelers().addAll(travelers);
+                request.getTravelers().addAll(buildTravelers());
 	}
 
 	private void addDocumentNode() {
-		MsgDocumentType document = factory.createMsgDocumentType();
+		MsgDocumentType document = getFactoy().createMsgDocumentType();
 		document.setName("NDC AirShoppingRQ Message");
 		document.setReferenceVersion("1.0");
 		request.setDocument(document);
