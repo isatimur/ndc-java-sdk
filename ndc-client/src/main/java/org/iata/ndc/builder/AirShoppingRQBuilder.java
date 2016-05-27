@@ -5,12 +5,10 @@ import java.util.*;
 import javax.xml.datatype.*;
 
 import org.iata.ndc.ClientException;
-import org.iata.ndc.builder.element.PartyBuilder;
 import org.iata.ndc.schema.*;
 import org.iata.ndc.schema.AirShopReqAttributeQueryTypeOriginDestination.CalendarDates;
 import org.iata.ndc.schema.FarePreferencesType.Type;
 import org.iata.ndc.schema.FlightDepartureType.AirportCode;
-import org.iata.ndc.schema.MsgPartiesType.Sender;
 
 /**
  * This class provides a simple way to create AirShoppingRQ objects. It implements fluent interface, thus allowing to chain methods.<br>
@@ -30,7 +28,7 @@ public class AirShoppingRQBuilder extends AbstractTravelAgencyBuilder<AirShoppin
 
 	/**
 	 * Creates a new instance of AirShoppingRQBuilder.
-	 * A new instance can be created for each request or you can use the {@link #clear() clear()} method.<br>
+	 * A new instance can be created for each request or you can use the {@link #initialize() initialize()} method.<br>
 	 *
 	 * Defaults:<ol>
 	 * <li> One adult traveler.

@@ -1,9 +1,7 @@
 package org.iata.ndc.builder;
 
-import java.util.List;
 import org.iata.ndc.schema.FlightPriceRQ;
 import org.iata.ndc.schema.MsgPartiesType;
-import org.iata.ndc.schema.TravelersTraveler;
 
 /**
  *
