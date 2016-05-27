@@ -58,6 +58,7 @@ try {
 * ServiceListRQBuilder 
 * ServicePriceRQBuilder
 * FlightPriceRQBuilder
+
 All other requests can be constructed manually, using ObjectFactory in org.iata.ndc.schema package.
 New common element builders will be added to org.iata.ndc.builder.element package.
 
