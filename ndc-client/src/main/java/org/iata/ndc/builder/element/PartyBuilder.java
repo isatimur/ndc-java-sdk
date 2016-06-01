@@ -1,5 +1,6 @@
 package org.iata.ndc.builder.element;
 
+import org.iata.ndc.builder.Buildable;
 import org.iata.ndc.schema.*;
 
 /**
@@ -7,7 +8,7 @@ import org.iata.ndc.schema.*;
  * A new instance of the builder can be created each time you need a different party object or you can use the {@link #clear() clear()} method.<br>
  *
  */
-public class PartyBuilder {
+public class PartyBuilder implements Buildable<MsgPartiesType>{
 	private static final ObjectFactory factory = new ObjectFactory();
 	private MsgPartiesType party;
 
@@ -45,6 +46,7 @@ public class PartyBuilder {
 	 * Builds MsgPartiesType instance and returns it.
 	 * @return constructed MsgPartiesType instance
 	 */
+        @Override
 	public MsgPartiesType build() {
 		return party;
 	}
