@@ -9,7 +9,7 @@ import java.util.*;
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;
 
-import org.iata.ndc.builder.AirShoppingRQBuilder.Traveler;
+import org.iata.ndc.builder.Traveler;
 import org.iata.ndc.schema.*;
 import org.iata.ndc.schema.MsgPartiesType.Participants;
 import org.iata.ndc.schema.MsgPartiesType.Participants.Participant;

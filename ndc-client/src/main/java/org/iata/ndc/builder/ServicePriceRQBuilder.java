@@ -3,7 +3,9 @@ package org.iata.ndc.builder;
 import org.iata.ndc.schema.*;
 import org.iata.ndc.schema.ShoppingResponseIDType.ResponseID;
 
-public class ServicePriceRQBuilder {
+public class ServicePriceRQBuilder implements Buildable<ServicePriceRQ>{
+        private static final String MESSAGE = "NDC ServicePriceRQ Message";
+    
 	private static final ObjectFactory factory = new ObjectFactory();
 
 	private ServicePriceRQ request;
@@ -45,17 +47,15 @@ public class ServicePriceRQBuilder {
 		return this;
 	}
 
+        @Override
 	public ServicePriceRQ build() {
-		request.setVersion("1.1.5");
+		request.setVersion(VERSION);
 		addDocumentNode();
 		return request;
 	}
 
 	private void addDocumentNode() {
-		MsgDocumentType document = factory.createMsgDocumentType();
-		document.setName("NDC ServicePriceRQ Message");
-		document.setReferenceVersion("1.0");
-		request.setDocument(document);
+		request.setDocument(MessageDocumentFactory.create(MESSAGE));
 	}
-
+    
 }
