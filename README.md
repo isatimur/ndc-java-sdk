@@ -34,7 +34,7 @@ Then add maven dependency as usual
 
 ## Usage
 
-Add ndc-client to project dependencies
+Add ndc-client and schema.jar to project dependencies
 
 Request sample
 ```java
